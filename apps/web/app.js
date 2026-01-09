@@ -21,6 +21,25 @@ function debug(obj) {
 
 if (tg) {
   tg.ready();
+
+    applyTheme();
+    let lastScheme = tg.colorScheme;
+    // 1) нормальный путь
+    tg.onEvent("themeChanged", () => {
+      lastScheme = tg.colorScheme;
+      applyTheme();
+    });
+    // 2) fallback для Desktop: поллим
+    setInterval(() => {
+      if (tg.colorScheme !== lastScheme) {
+        lastScheme = tg.colorScheme;
+        applyTheme();
+      }
+    }, 400);
+    // 3) ещё один fallback: когда окно снова активно
+    document.addEventListener("visibilitychange", () => applyTheme());
+    window.addEventListener("focus", () => applyTheme());
+
     function applyTheme() {
   if (!tg) return;
 
