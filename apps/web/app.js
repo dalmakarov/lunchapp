@@ -1,5 +1,19 @@
 const tg = window.Telegram?.WebApp;
 
+function applyTheme() {
+  if (!tg) return;
+
+  const p = tg.themeParams || {};
+  const root = document.documentElement;
+
+  root.style.setProperty("--bg", p.bg_color || "#ffffff");
+  root.style.setProperty("--text", p.text_color || "#000000");
+  root.style.setProperty("--hint", p.hint_color || "#6b7280");
+  root.style.setProperty("--card", p.secondary_bg_color || "#f4f4f4");
+  root.style.setProperty("--button", p.button_color || "#2ea6ff");
+  root.style.setProperty("--button-text", p.button_text_color || "#ffffff");
+}
+
 const debugEl = document.getElementById("debug");
 function debug(obj) {
   debugEl.textContent = typeof obj === "string" ? obj : JSON.stringify(obj, null, 2);
@@ -7,6 +21,9 @@ function debug(obj) {
 
 if (tg) {
   tg.ready();
+    applyTheme();
+    tg.onEvent("themeChanged", applyTheme);
+    
   debug({
     platform: tg.platform,
     version: tg.version,

@@ -5,11 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FoodFix</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; padding: 16px; }
-    button { width: 100%; padding: 14px; font-size: 16px; }
-    pre { white-space: pre-wrap; background: #f4f4f4; padding: 12px; border-radius: 8px; }
-  </style>
+<style>
+  :root{
+    --bg:#ffffff;
+    --text:#000000;
+    --hint:#6b7280;
+    --card:#f4f4f4;
+    --button:#2ea6ff;
+    --button-text:#ffffff;
+  }
+
+  body{
+    font-family: system-ui, -apple-system, sans-serif;
+    padding:16px;
+    background:var(--bg);
+    color:var(--text);
+  }
+
+  p{ color: var(--hint); }
+
+  button{
+    width:60%;
+    padding:14px;
+    font-size:16px;
+    border:0;
+    border-radius:10px;
+    background:var(--button);
+    color:var(--button-text);
+    cursor:pointer;
+  }
+
+  pre{
+    white-space:pre-wrap;
+    background:var(--card);
+    padding:12px;
+    border-radius:8px;
+    color:var(--text);
+  }
+</style>
 </head>
 <body>
   <h2>LunchApp — каталог</h2>
