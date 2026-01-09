@@ -28,15 +28,19 @@ function applyTheme() {
   root.style.setProperty("--card", p.secondary_bg_color || fallback.card);
   root.style.setProperty("--button", p.button_color || fallback.button);
   root.style.setProperty("--button-text", p.button_text_color || fallback.buttonText);
+      const prefersDark =
+  window.matchMedia &&
+  window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-  debug({
-    platform: tg.platform,
-    version: tg.version,
-    colorScheme: tg.colorScheme,
-    effectiveScheme,
-    hasThemeParams: tg.themeParams ? Object.keys(tg.themeParams).length : 0,
-    themeParams: tg.themeParams || null,
-  });
+debug({
+  platform: tg.platform,
+  version: tg.version,
+  colorScheme: tg.colorScheme,
+  effectiveScheme,
+  hasThemeParams,
+  prefersDark,
+  themeParams: tg.themeParams || null,
+});
 }
 
 if (tg) {
@@ -61,7 +65,7 @@ if (tg) {
   document.addEventListener("visibilitychange", () => applyTheme());
   window.addEventListener("focus", () => applyTheme());
 } else {
-  debug("Telegram WebApp API не найден. Откройте страницу внутри Telegram.");
+    debug("Telegram WebApp API не найден. Откройте страницу внутри Telegram.");
 }
 
 document.getElementById("send").addEventListener("click", () => {
