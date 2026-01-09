@@ -21,7 +21,38 @@ function debug(obj) {
 
 if (tg) {
   tg.ready();
-    applyTheme();
+    function applyTheme() {
+  if (!tg) return;
+
+  const p = tg.themeParams || {};
+  const root = document.documentElement;
+
+  const isDark = (tg.colorScheme === "dark");
+
+  // Фолбэк дефолты, если Telegram не дал themeParams (часто в Desktop)
+  const fallback = isDark ? {
+    bg: "#0f172a",
+    text: "#e5e7eb",
+    hint: "#94a3b8",
+    card: "#111827",
+    button: "#3b82f6",
+    buttonText: "#ffffff",
+  } : {
+    bg: "#ffffff",
+    text: "#111827",
+    hint: "#6b7280",
+    card: "#f3f4f6",
+    button: "#2ea6ff",
+    buttonText: "#ffffff",
+  };
+
+  root.style.setProperty("--bg", p.bg_color || fallback.bg);
+  root.style.setProperty("--text", p.text_color || fallback.text);
+  root.style.setProperty("--hint", p.hint_color || fallback.hint);
+  root.style.setProperty("--card", p.secondary_bg_color || fallback.card);
+  root.style.setProperty("--button", p.button_color || fallback.button);
+  root.style.setProperty("--button-text", p.button_text_color || fallback.buttonText);
+}
     tg.onEvent("themeChanged", applyTheme);
     
   debug({
