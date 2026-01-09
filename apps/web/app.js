@@ -8,11 +8,15 @@ function debug(obj) {
 function applyTheme() {
   if (!tg) return;
 
+  const schemeFromTelegram = tg.colorScheme; // может быть всегда "light" на Desktop
+  const schemeFromSystem = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  
+  // если Telegram не даёт нормальную тему (themeParams пустой), доверяем системе
+  const hasThemeParams = tg.themeParams && Object.keys(tg.themeParams).length > 0;
+  const effectiveScheme = hasThemeParams ? schemeFromTelegram : schemeFromSystem;
+  const isDark = effectiveScheme === "dark";
   const p = tg.themeParams || {};
   const root = document.documentElement;
-
-  const scheme = tg.colorScheme; // "dark" | "light" | undefined
-  const isDark = scheme === "dark";
 
   const fallback = isDark
     ? { bg: "#0f172a", text: "#e5e7eb", hint: "#94a3b8", card: "#111827", button: "#3b82f6", buttonText: "#ffffff" }
@@ -25,16 +29,20 @@ function applyTheme() {
   root.style.setProperty("--button", p.button_color || fallback.button);
   root.style.setProperty("--button-text", p.button_text_color || fallback.buttonText);
 
-  // покажем, что реально приходит (особенно на macOS)
   debug({
     platform: tg.platform,
     version: tg.version,
     colorScheme: tg.colorScheme,
-    themeParams: tg.themeParams,
+    effectiveScheme,
+    hasThemeParams: tg.themeParams ? Object.keys(tg.themeParams).length : 0,
+    themeParams: tg.themeParams || null,
   });
 }
 
 if (tg) {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    mq.addEventListener?.("change", applyTheme);
+    mq.addListener?.(applyTheme); // для старых WebView
   tg.ready();
 
   applyTheme();
